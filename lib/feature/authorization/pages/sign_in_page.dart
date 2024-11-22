@@ -38,6 +38,7 @@ class _SignInPageState extends State<SignInPage> {
               CupertinoTextField(
                 controller: emailController,
                 placeholder: 'Enter your email',
+                keyboardType: TextInputType.emailAddress,
                 // decoration: const InputDecoration(label: Text('Email')),
               ),
               const SizedBox(height: 10),

@@ -4,7 +4,6 @@ import 'package:firebase_auth_example/feature/task/cubit/task_list/task_list_cub
 import 'package:firebase_auth_example/feature/task/cubit/task_list/task_list_cubit_state.dart';
 import 'package:firebase_auth_example/feature/task/pages/new_task_page.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -23,16 +22,25 @@ class TaskListPage extends StatelessWidget {
           icon: CupertinoIcons.add,
         ),
         middle: const Text("Tasks"),
-        trailing: CupertinoIconButton(
-          onPressed: () => context.go(SettingsPage.path),
-          icon: CupertinoIcons.settings,
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CupertinoIconButton(
+              onPressed: TaskListCubit.i(context).loadTasks,
+              icon: CupertinoIcons.arrow_clockwise,
+            ),
+            CupertinoIconButton(
+              onPressed: () => context.go(SettingsPage.path),
+              icon: CupertinoIcons.settings,
+            ),
+          ],
         ),
       ),
       child: BlocBuilder<TaskListCubit, TaskListCubitState>(
         builder: (context, state) {
           if (state is TaskListStateLoading) {
             return const Center(
-              child: CircularProgressIndicator(),
+              child: CupertinoActivityIndicator(),
             );
           }
           if (state is TaskListStateSuccess) {
@@ -89,6 +97,14 @@ class TaskListPage extends StatelessWidget {
                 );
               },
               itemCount: state.taskList.length,
+            );
+          }
+          if (state is TaskListStateFailure) {
+            return Center(
+              child: Text(
+                "ERROR ${state.error}",
+                style: const TextStyle(color: CupertinoColors.systemRed),
+              ),
             );
           }
           return const SizedBox();
