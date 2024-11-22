@@ -28,7 +28,7 @@ final class TaskRepository implements ITaskRepository {
       log("ADD TASK $jsonData");
       await _taskCollection.add({...jsonData, "userId": _user.uid});
     } catch (e) {
-      throw Exception('Failed to add task');
+      rethrow;
     }
   }
 
@@ -37,7 +37,7 @@ final class TaskRepository implements ITaskRepository {
     try {
       await _taskCollection.doc(taskId).delete();
     } catch (e) {
-      throw Exception('Failed to delete task');
+      rethrow;
     }
   }
 
@@ -52,7 +52,7 @@ final class TaskRepository implements ITaskRepository {
       final task = TaskModel.fromMap(jsonData);
       return task;
     } catch (e) {
-      throw Exception('Failed to get task $taskId');
+      rethrow;
     }
   }
 
@@ -70,7 +70,7 @@ final class TaskRepository implements ITaskRepository {
 
       return taskList;
     } catch (e) {
-      return [];
+      rethrow;
     }
   }
 
@@ -79,7 +79,7 @@ final class TaskRepository implements ITaskRepository {
     try {
       await _taskCollection.doc(task.id).update(task.toMap());
     } catch (e) {
-      throw Exception('Failed to get task ${task.id}');
+      rethrow;
     }
   }
 }
